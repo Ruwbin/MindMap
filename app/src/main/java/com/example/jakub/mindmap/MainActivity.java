@@ -1,5 +1,7 @@
 package com.example.jakub.mindmap;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
@@ -26,14 +28,14 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        Node node = new Node(this,width,height);
-        System.out.println(width + " x " + height);
+        Node node = new Node(this,width/2,height/2);
+        node.setText("MainNode");
+
 
     }
 
@@ -44,10 +46,6 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

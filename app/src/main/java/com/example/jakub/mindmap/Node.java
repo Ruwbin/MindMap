@@ -2,6 +2,8 @@ package com.example.jakub.mindmap;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -18,8 +20,11 @@ public class Node {
     int id = 0;
     volatile static int ID = 0;
     static List<Node> nodeList = new LinkedList<Node>();
+    int x,y;
 
     public Node(Activity activity,int x, int y) {
+        this.x = x;
+        this.y = y;
         id = ID++;
         this.activity = activity;
         nodeList.add(this);
