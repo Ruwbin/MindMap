@@ -33,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        Node node = new Node(this,width/2,height/2);
+        Node node = new Node((DrawingLayout) findViewById(R.id.mainLayout),width/2,height/2);
         node.setText("MainNode");
 
 
@@ -63,12 +63,5 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            new Node(this, (int) event.getRawX(), (int) event.getRawY());
 
-        }
-        return super.onTouchEvent(event);
-    }
 }
