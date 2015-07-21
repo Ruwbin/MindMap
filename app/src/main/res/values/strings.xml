@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">MindMap</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="button_new">NEW</string>
+    <string name="button_settings">SETTINGS</string>
+    <string name="button_store">STORE</string>
+    <string name="button_browse">BROWSE</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
 </resources>
