@@ -43,6 +43,14 @@
             android:layout_weight="1"
             android:src="@mipmap/browseimg"
             android:scaleType="centerCrop" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView6"
+            android:visibility="gone"
+            android:src="@mipmap/browseclickedimg"
+            android:scaleType="centerCrop" />
 
 
     </LinearLayout>
@@ -60,6 +68,14 @@
             android:layout_weight="1"
             android:scaleType="centerCrop"
             android:src="@mipmap/storeimg" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView7"
+            android:visibility="gone"
+            android:src="@mipmap/storeclickedimg"
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:layout_width="0dp"
@@ -68,5 +84,14 @@
             android:layout_weight="1"
             android:src="@mipmap/settingsimg"
             android:scaleType="centerCrop" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView8"
+            android:visibility="gone"
+            android:src="@mipmap/settingsclickedimg"
+            android:scaleType="centerCrop" />
+
     </LinearLayout>
 </LinearLayout>
