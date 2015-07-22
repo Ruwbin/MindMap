@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MyLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:background="#ff000000"
+    tools:context="com.example.jakub.mindmap.MainMenuActivity">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50"
+        android:id="@+id/imgName"
+        android:src="@mipmap/name"
+        android:scaleType="centerCrop" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        android:id="@+id/eTName"
+        android:background="#ff0060ff"
+        android:editable="true"
+        android:autoText="false"
+        android:clickable="true"
+        android:nestedScrollingEnabled="true"
+        android:textColor="#f0ffffff"
+        android:textSize="30dp"
+        android:hint="e.g. History" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/imgMotive"
+        android:layout_weight="50"
+        android:src="@mipmap/arrangement"
+        android:scaleType="centerCrop" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_weight="250"
+        android:layout_height="0dp"
+        android:id="@+id/imageView01"
+        android:src="@mipmap/browseclickedimg"
+        android:scaleType="centerCrop" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_weight="50"
+        android:layout_height="0dp"
+        android:id="@+id/imgArrangement"
+        android:src="@mipmap/browseimg"
+        android:scaleType="centerCrop" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_weight="250"
+        android:layout_height="0dp"
+        android:id="@+id/imageView02"
+        android:src="@mipmap/browseclickedimg"
+        android:scaleType="centerCrop" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_weight="50"
+        android:layout_height="0dp"
+        android:id="@+id/imgDone"
+        android:src="@mipmap/browseimg"
+        android:scaleType="centerCrop" />
+
+</LinearLayout>

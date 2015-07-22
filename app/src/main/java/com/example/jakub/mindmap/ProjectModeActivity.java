@@ -22,7 +22,7 @@ import android.widget.TextView;
 import java.util.Objects;
 
 
-public class MainActivity extends ActionBarActivity {
+public class ProjectModeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

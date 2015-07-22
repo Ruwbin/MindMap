@@ -8,9 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 
 public class MainMenuActivity extends ActionBarActivity {
@@ -131,14 +129,11 @@ public class MainMenuActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void CreateNewMap() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, NewMapActivity.class);
         startActivity(intent);
 
     }
 
-    public void ClickedBrowseButton(View view){
-
-
-    }
 }
