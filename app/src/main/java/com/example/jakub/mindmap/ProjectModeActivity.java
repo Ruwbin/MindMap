@@ -36,7 +36,6 @@ public class ProjectModeActivity extends ActionBarActivity {
         Node node = new Node((DrawingLayout) findViewById(R.id.mainLayout),width/2,height/2);
         node.setText("MainNode");
 
-
     }
 
     @Override
