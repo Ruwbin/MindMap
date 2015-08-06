@@ -55,7 +55,7 @@ public class DrawingLayout extends RelativeLayout{
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
-       /* switch (event.getAction()) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touch_start(event.getRawX(), event.getRawY());
                 break;
@@ -67,7 +67,7 @@ public class DrawingLayout extends RelativeLayout{
                 touch_up(event.getRawX(), event.getRawY());
                 invalidate();
                 break;
-        }*/
+        }
 
 
         return true;
@@ -109,14 +109,16 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     protected void onDraw(Canvas canvas) {
-       // canvas.drawPath(path,drawPaint);
-       // canvas.drawPath(path2,drawPaint2);
+        canvas.drawPath(path, drawPaint);
+        canvas.drawPath(path2, drawPaint2);
         super.onDraw(canvas);
         canvas.save();
 
-        Node node = Node.nodeList.get(0);
-        node.textView.setScaleX(mScaleFactor);
-        node.textView.setScaleY(mScaleFactor);
+        for(Node node: Node.nodeList){
+            node.textView.setScaleX(mScaleFactor);
+            node.textView.setScaleY(mScaleFactor);
+        }
+
         canvas.scale(mScaleFactor, mScaleFactor);
         canvas.restore();
 
