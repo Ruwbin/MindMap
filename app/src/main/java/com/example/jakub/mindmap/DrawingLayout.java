@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.widget.RelativeLayout;
 
 /**
@@ -17,9 +18,13 @@ public class DrawingLayout extends RelativeLayout{
     Paint drawPaint,drawPaint2;
     Path path = new Path();
     Path path2 = new Path();
+    private ScaleGestureDetector mScaleDetector;
+    private float mScaleFactor = 1.f;
+
 
     public DrawingLayout(Context context) { //trzy konstruktory musza byc
         super(context);
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public DrawingLayout(Context context, AttributeSet attrs) {
@@ -36,10 +41,12 @@ public class DrawingLayout extends RelativeLayout{
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
         drawPaint2 = new Paint(drawPaint);
         drawPaint2.setColor(Color.CYAN);
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
     public DrawingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
     Float lastX = null;
     Float lastY = null;
@@ -47,8 +54,8 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        switch (event.getAction()) {
+        mScaleDetector.onTouchEvent(event);
+       /* switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touch_start(event.getRawX(), event.getRawY());
                 break;
@@ -60,7 +67,7 @@ public class DrawingLayout extends RelativeLayout{
                 touch_up(event.getRawX(), event.getRawY());
                 invalidate();
                 break;
-        }
+        }*/
 
 
         return true;
@@ -102,7 +109,35 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawPath(path,drawPaint);
-        canvas.drawPath(path2,drawPaint2);
+       // canvas.drawPath(path,drawPaint);
+       // canvas.drawPath(path2,drawPaint2);
+        super.onDraw(canvas);
+        canvas.save();
+
+        Node node = Node.nodeList.get(0);
+        node.textView.setScaleX(mScaleFactor);
+        node.textView.setScaleY(mScaleFactor);
+        canvas.scale(mScaleFactor, mScaleFactor);
+        canvas.restore();
+
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(0, 0);
+    }
+
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+
+            invalidate();
+            return true;
+        }
     }
 }
