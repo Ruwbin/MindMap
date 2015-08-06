@@ -36,7 +36,6 @@ public class ProjectModeActivity extends ActionBarActivity {
         Node node = new Node((DrawingLayout) findViewById(R.id.mainLayout),width/2,height/2);
         node.setText("MainNode");
 
-
     }
 
     @Override
@@ -44,6 +43,7 @@ public class ProjectModeActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+        //kupastraszna
     }
 
 
