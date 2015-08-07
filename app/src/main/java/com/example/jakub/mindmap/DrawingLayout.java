@@ -55,7 +55,7 @@ public class DrawingLayout extends RelativeLayout{
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mScaleDetector.onTouchEvent(event);
-       /* switch (event.getAction()) {
+      /*  switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touch_start(event.getRawX(), event.getRawY());
                 break;
@@ -112,13 +112,12 @@ public class DrawingLayout extends RelativeLayout{
        // canvas.drawPath(path,drawPaint);
        // canvas.drawPath(path2,drawPaint2);
         super.onDraw(canvas);
-        canvas.save();
-
+       // canvas.save();
         Node node = Node.nodeList.get(0);
         node.textView.setScaleX(mScaleFactor);
         node.textView.setScaleY(mScaleFactor);
         canvas.scale(mScaleFactor, mScaleFactor);
-        canvas.restore();
+       // canvas.restore();
 
     }
 
@@ -134,7 +133,7 @@ public class DrawingLayout extends RelativeLayout{
             mScaleFactor *= detector.getScaleFactor();
 
             // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
+            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 10.0f));
 
             invalidate();
             return true;
