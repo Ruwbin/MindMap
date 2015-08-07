@@ -4,11 +4,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:paddingTop="0dp"
-    android:paddingBottom="0dp" tools:context=".MainActivity"
+    android:clipToPadding="true"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp" tools:context=".MainActivity"
     android:id="@+id/mainLayout">
 
 

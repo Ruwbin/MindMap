@@ -35,6 +35,8 @@ public class ProjectModeActivity extends ActionBarActivity {
         int height = size.y;
         Node node = new Node((DrawingLayout) findViewById(R.id.mainLayout),width/2,height/2);
         node.setText("MainNode");
+        Node node2 = new Node((DrawingLayout) findViewById(R.id.mainLayout),width*5,height*5);
+        node2.setText("Rozszerza");
 
     }
 
