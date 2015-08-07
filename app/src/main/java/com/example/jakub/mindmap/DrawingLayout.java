@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.widget.RelativeLayout;
 
+import com.example.jakub.mindmap.handlers.NodesHandler;
+
 /**
  * Created by Jakub on 2015-07-15.
  * Wlasny Layout, zeby mozna bylo rysowac
@@ -20,11 +22,13 @@ public class DrawingLayout extends RelativeLayout{
     Path path2 = new Path();
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
+    NodesHandler nodesHandler;
 
 
     public DrawingLayout(Context context) { //trzy konstruktory musza byc
         super(context);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        nodesHandler = new NodesHandler(context);
     }
 
     public DrawingLayout(Context context, AttributeSet attrs) {
@@ -42,11 +46,15 @@ public class DrawingLayout extends RelativeLayout{
         drawPaint2 = new Paint(drawPaint);
         drawPaint2.setColor(Color.CYAN);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        nodesHandler = new NodesHandler(context);
+
     }
 
     public DrawingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        nodesHandler = new NodesHandler(context);
+
     }
     Float lastX = null;
     Float lastY = null;
@@ -98,7 +106,9 @@ public class DrawingLayout extends RelativeLayout{
         path2.reset();
         System.out.println("touch up");
         if(begNode != null && Node.clickedNode((int) rawX, (int) rawY) == null) {
-            new Node(this, (int) rawX, (int) rawY);
+            Node node = new Node((int) rawX, (int) rawY);
+            node.paint(this);
+            nodesHandler.addNode(node);
             path.moveTo(begNode.x,begNode.y);
             path.lineTo(rawX, rawY);
         }

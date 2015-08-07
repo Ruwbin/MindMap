@@ -16,53 +16,74 @@ import java.util.List;
  * Created by Jakub on 2015-07-15.
  */
 public class Node {
-    DrawingLayout drawingLayout;
     TextView textView;
+    String text;
     int id = 0;
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public String getText() {
+        return text;
+    }
+
     volatile static int ID = 0;
     public static List<Node> nodeList = new LinkedList<Node>(); //zmienic na mape
-    int x,y;
+    int x, y;
 
-    public Node(DrawingLayout drawingLayout,int x, int y) {
+    public Node(int x, int y) {
         this.x = x;
         this.y = y;
         id = ID++;
-        this.drawingLayout = drawingLayout;
         nodeList.add(this);
+    }
 
+    public void paint(DrawingLayout drawingLayout) {
         textView = new TextView(drawingLayout.getContext());
         textView.setLayoutParams(new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT ));
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.leftMargin = x;
         params.topMargin = y;
         textView.setTextSize(22);
         setText("id: " + id);
+        text = String.valueOf("id: " + id);
         setBgColor(Color.GREEN);
-        drawingLayout.addView(textView,params);
+        drawingLayout.addView(textView, params);
+
     }
-    public void setText(String text){
+
+    public void setText(String text) {
         textView.setText(text);
+        this.text = text;
     }
-    public void setBgColor(int color){
+
+    public void setBgColor(int color) {
         textView.setBackgroundColor(color);
     }
-    public int getHeight(){
+
+    public int getHeight() {
         textView.measure(0, 0);
         return textView.getMeasuredHeight();
     }
-    public int getWidth(){
+
+    public int getWidth() {
         textView.measure(0, 0);
         return textView.getMeasuredWidth();
     }
-    static Node clickedNode(int clickedX,int clickedY){
 
+    static Node clickedNode(int clickedX, int clickedY) {
         System.out.println("clickedX,Y" + clickedX + " " + clickedY);
         Node tempNode = null;
-        for(Node node : nodeList){
-            if(node.x <= clickedX && clickedX<= node.x + node.getWidth()
-                    && node.y <= clickedY && clickedY <= node.y + node.getHeight()){
+        for (Node node : nodeList) {
+            if (node.x <= clickedX && clickedX <= node.x + node.getWidth()
+                    && node.y <= clickedY && clickedY <= node.y + node.getHeight()) {
                 tempNode = node;
                 break;
             }
@@ -72,6 +93,6 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node "+id;
+        return "Node " + id;
     }
 }

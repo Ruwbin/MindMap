@@ -19,23 +19,41 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.jakub.mindmap.handlers.NodesHandler;
+
+import java.util.List;
 import java.util.Objects;
 
 
 public class ProjectModeActivity extends ActionBarActivity {
 
+    NodesHandler nodesHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        nodesHandler = new NodesHandler(this);
         setContentView(R.layout.activity_main);
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        Node node = new Node((DrawingLayout) findViewById(R.id.mainLayout),width/2,height/2);
-        node.setText("MainNode");
+        restore();
+    }
 
+    public void restore(){
+        List<NodesHandler.NodeBuilder> nodeBuilderList = nodesHandler.readNodeBuilderList();
+        if(nodeBuilderList.isEmpty()){
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+            Node node = new Node(width/2,height/2);
+            node.paint((DrawingLayout) findViewById(R.id.mainLayout));
+            node.setText("MainNode");
+            nodesHandler.addNode(node);
+        }
+        for(NodesHandler.NodeBuilder nodeBuilder: nodeBuilderList){
+            Node node = new Node(nodeBuilder.getX(),nodeBuilder.getY());
+            node.paint((DrawingLayout) findViewById(R.id.mainLayout));
+            node.setText(nodeBuilder.getText());
+        }
     }
 
     @Override
