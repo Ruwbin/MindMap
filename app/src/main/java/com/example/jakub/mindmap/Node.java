@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -19,6 +21,7 @@ public class Node {
     TextView textView;
     String text;
     int id = 0;
+    DrawingLayout mDrawingLayout;
 
     public int getX() {
         return x;
@@ -35,7 +38,6 @@ public class Node {
     volatile static int ID = 0;
     public static List<Node> nodeList = new LinkedList<Node>(); //zmienic na mape
     int x, y;
-
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
@@ -43,7 +45,16 @@ public class Node {
         nodeList.add(this);
     }
 
+    public Node(int x, int y, DrawingLayout drawingLayout) {
+        this.x = x;
+        this.y = y;
+        id = ID++;
+        this.mDrawingLayout=drawingLayout;
+        nodeList.add(this);
+    }
+
     public void paint(DrawingLayout drawingLayout) {
+        this.mDrawingLayout=drawingLayout;
         textView = new TextView(drawingLayout.getContext());
         textView.setLayoutParams(new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -52,11 +63,29 @@ public class Node {
         params.leftMargin = x;
         params.topMargin = y;
         textView.setTextSize(22);
+
         setText("id: " + id);
         text = String.valueOf("id: " + id);
         setBgColor(Color.GREEN);
-        drawingLayout.addView(textView, params);
 
+        View.OnTouchListener mTouchListener = new View.OnTouchListener(){
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mDrawingLayout.touch_start(event.getRawX(), event.getRawY());
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mDrawingLayout.touch_move(event.getRawX(), event.getRawY());
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mDrawingLayout.touch_up(event.getRawX(), event.getRawY());
+                        break;
+                }
+                return true;
+            }
+        };
+        textView.setOnTouchListener(mTouchListener);
+        drawingLayout.addView(textView, params);
     }
 
     public void setText(String text) {
@@ -77,6 +106,7 @@ public class Node {
         textView.measure(0, 0);
         return textView.getMeasuredWidth();
     }
+
 
     static Node clickedNode(int clickedX, int clickedY) {
         System.out.println("clickedX,Y" + clickedX + " " + clickedY);

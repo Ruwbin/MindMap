@@ -59,26 +59,11 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-       return mScaleDetector.onTouchEvent(event);
-        /*switch (event.getAction()) {
-           case MotionEvent.ACTION_DOWN:
-                touch_start(event.getRawX(), event.getRawY());
-                break;
-            case MotionEvent.ACTION_MOVE:
-                touch_move(event.getRawX(), event.getRawY());
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-                touch_up(event.getRawX(), event.getRawY());
-                invalidate();
-                break;
-        }*/
-
-
-        //return true;
+       mScaleDetector.onTouchEvent(event);
+        return true;
     }
 
-    private void touch_start(float rawX, float rawY) {
+    public void touch_start(float rawX, float rawY) {
         if(Node.clickedNode((int) rawX, (int) rawY) != null) {
             Node node = Node.clickedNode((int) rawX, (int) rawY);
             System.out.println("Clicked "+ node);
@@ -93,17 +78,17 @@ public class DrawingLayout extends RelativeLayout{
         }
     }
 
-    private void touch_move(float rawX, float rawY) {
+    public void touch_move(float rawX, float rawY) {
         System.out.println("move");
         if(begNode != null)
         path2.lineTo(rawX, rawY);
     }
 
-    private void touch_up(float rawX, float rawY) {
+    public void touch_up(float rawX, float rawY) {
         path2.reset();
         System.out.println("touch up");
         if(begNode != null && Node.clickedNode((int) rawX, (int) rawY) == null) {
-            Node node = new Node((int) rawX, (int) rawY);
+            Node node = new Node((int) rawX, (int) rawY, this);
             node.paint(this);
             nodesHandler.addNode(node);
             path.moveTo(begNode.x,begNode.y);
@@ -116,10 +101,11 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //canvas.drawPath(path, drawPaint);
-        //canvas.drawPath(path2, drawPaint2);
-        super.onDraw(canvas);
+        canvas.drawPath(path, drawPaint);
+        canvas.drawPath(path2, drawPaint2);
         canvas.save();
+        super.onDraw(canvas);
+
 
         //for(Node node: Node.nodeList){
          //   node.textView.setScaleX(mScaleFactor);
@@ -127,14 +113,14 @@ public class DrawingLayout extends RelativeLayout{
         //}
 
         canvas.scale(mScaleFactor, mScaleFactor);
-       // canvas.restore();
+     //   canvas.restore();
 
     }
 
-   /* @Override
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(0, 0);
-    }*/
+    }
 /*
     private class ScaleListener
             extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -170,7 +156,8 @@ public class DrawingLayout extends RelativeLayout{
             float spana = mScaleDetector.getCurrentSpan();
             // float spanY = ScaleGestureDetector.getCurrentSpanY(scaleGestureDetector);
 
-            mScaleFactor =  spana/lastSpan;
+            mScaleFactor =  mScaleFactor*spana/lastSpan;
+            //System.out.println("mScaleFactor "+mScaleFactor );
             //float newHeight = lastSpan / spana * mCurrentViewport.height();
 
             float focusX = scaleGestureDetector.getFocusX();
@@ -189,7 +176,7 @@ public class DrawingLayout extends RelativeLayout{
             mCurrentViewport.right = mCurrentViewport.left + newWidth;
             mCurrentViewport.bottom = mCurrentViewport.top + newHeight;
             constrainViewport();*/
-           // invalidate();
+            invalidate();
             //ViewCompat.postInvalidateOnAnimation(DrawingLayout.this);
 
             lastSpan = spana;
