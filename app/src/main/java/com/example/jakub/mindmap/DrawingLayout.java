@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -17,7 +19,7 @@ import com.example.jakub.mindmap.handlers.NodesHandler;
  * Created by Jakub on 2015-07-15.
  * Wlasny Layout, zeby mozna bylo rysowac
  */
-public class DrawingLayout extends View{
+public class DrawingLayout extends RelativeLayout{
     Paint drawPaint,drawPaint2;
     Path path = new Path();
     Path path2 = new Path();
@@ -47,7 +49,7 @@ public class DrawingLayout extends View{
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
         drawPaint2 = new Paint(drawPaint);
         drawPaint2.setColor(Color.CYAN);
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        mScaleDetector = new ScaleGestureDetector(context, mScaleListener);
         nodesHandler = new NodesHandler(context);
 
     }
@@ -57,9 +59,9 @@ public class DrawingLayout extends View{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mScaleDetector.onTouchEvent(event);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+       return mScaleDetector.onTouchEvent(event);
+        /*switch (event.getAction()) {
+           case MotionEvent.ACTION_DOWN:
                 touch_start(event.getRawX(), event.getRawY());
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -70,10 +72,10 @@ public class DrawingLayout extends View{
                 touch_up(event.getRawX(), event.getRawY());
                 invalidate();
                 break;
-        }
+        }*/
 
 
-        return true;
+        //return true;
     }
 
     private void touch_start(float rawX, float rawY) {
@@ -114,26 +116,26 @@ public class DrawingLayout extends View{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawPath(path, drawPaint);
-        canvas.drawPath(path2, drawPaint2);
+        //canvas.drawPath(path, drawPaint);
+        //canvas.drawPath(path2, drawPaint2);
         super.onDraw(canvas);
         canvas.save();
 
-        for(Node node: Node.nodeList){
-            node.textView.setScaleX(mScaleFactor);
-            node.textView.setScaleY(mScaleFactor);
-        }
+        //for(Node node: Node.nodeList){
+         //   node.textView.setScaleX(mScaleFactor);
+         //   node.textView.setScaleY(mScaleFactor);
+        //}
 
         canvas.scale(mScaleFactor, mScaleFactor);
-        canvas.restore();
+       // canvas.restore();
 
     }
 
-    @Override
+   /* @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(0, 0);
-    }
-
+    }*/
+/*
     private class ScaleListener
             extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
@@ -146,5 +148,53 @@ public class DrawingLayout extends View{
             invalidate();
             return true;
         }
-    }
+    }*/
+    private final ScaleGestureDetector.OnScaleGestureListener mScaleListener
+            = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        /**
+         * This is the active focal point in terms of the viewport. Could be a local
+         * variable but kept here to minimize per-frame allocations.
+         */
+        private PointF viewportFocus = new PointF();
+        private float lastSpan;
+        //private float lastSpanY;
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
+            lastSpan = mScaleDetector.getCurrentSpan();
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
+            float spana = mScaleDetector.getCurrentSpan();
+            // float spanY = ScaleGestureDetector.getCurrentSpanY(scaleGestureDetector);
+
+            mScaleFactor =  spana/lastSpan;
+            //float newHeight = lastSpan / spana * mCurrentViewport.height();
+
+            float focusX = scaleGestureDetector.getFocusX();
+            float focusY = scaleGestureDetector.getFocusY();
+            //hitTest(focusX, focusY, viewportFocus);
+    /*
+            mCurrentViewport.set(
+                    viewportFocus.x
+                            - newWidth * (focusX - mContentRect.left)
+                            / mContentRect.width(),
+                    viewportFocus.y
+                            - newHeight * (mContentRect.bottom - focusY)
+                            / mContentRect.height(),
+                    0,
+                    0);
+            mCurrentViewport.right = mCurrentViewport.left + newWidth;
+            mCurrentViewport.bottom = mCurrentViewport.top + newHeight;
+            constrainViewport();*/
+           // invalidate();
+            //ViewCompat.postInvalidateOnAnimation(DrawingLayout.this);
+
+            lastSpan = spana;
+            return true;
+        }
+    };
+
 }
