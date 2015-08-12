@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.jakub.mindmap.handlers.NodesHandler;
@@ -16,7 +17,7 @@ import com.example.jakub.mindmap.handlers.NodesHandler;
  * Created by Jakub on 2015-07-15.
  * Wlasny Layout, zeby mozna bylo rysowac
  */
-public class DrawingLayout extends RelativeLayout{
+public class DrawingLayout extends View{
     Paint drawPaint,drawPaint2;
     Path path = new Path();
     Path path2 = new Path();
@@ -24,15 +25,16 @@ public class DrawingLayout extends RelativeLayout{
     private float mScaleFactor = 1.f;
     NodesHandler nodesHandler;
 
-
     public DrawingLayout(Context context) { //trzy konstruktory musza byc
-        super(context);
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        nodesHandler = new NodesHandler(context);
+        this(context, null, 0);
     }
 
     public DrawingLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
+    }
+
+    public DrawingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         this.setWillNotDraw(false); // inaczej nie wywola onDraw
         setFocusable(true);
         setFocusableInTouchMode(true);
@@ -45,13 +47,6 @@ public class DrawingLayout extends RelativeLayout{
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
         drawPaint2 = new Paint(drawPaint);
         drawPaint2.setColor(Color.CYAN);
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        nodesHandler = new NodesHandler(context);
-
-    }
-
-    public DrawingLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         nodesHandler = new NodesHandler(context);
 
