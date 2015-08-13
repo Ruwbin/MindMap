@@ -27,8 +27,8 @@ public class DrawingLayout extends RelativeLayout{
     Path path = new Path();
     Path path2 = new Path();
     private ScaleGestureDetector mScaleDetector;
-    private float mScaleFactor = 1.f;
-    float focusX, focusY;
+    private float mScaleFactor = 1.f, oldmScaleFactor=1.f;
+    float focusX=1000.f, focusY=1000.f, oldFocusX=1000.f, oldFocusY=1000.f;
     NodesHandler nodesHandler;
 
     public DrawingLayout(Context context) { //trzy konstruktory musza byc
@@ -65,6 +65,7 @@ public class DrawingLayout extends RelativeLayout{
     public boolean onTouchEvent(MotionEvent event) {
         float scaledX=((event.getRawX()-focusX)/mScaleFactor)+focusX,
                 scaledY=((event.getRawY()-focusY)/mScaleFactor)+focusY;
+        System.out.println("clicked X: " + event.getRawX() + " Y: " + event.getRawY());
         mScaleDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -123,26 +124,28 @@ public class DrawingLayout extends RelativeLayout{
         canvas.save();
         super.onDraw(canvas);
 
-       // this.setTranslationX(focusX);
-        //this.setTranslationY(focusY);
-        this.setPivotX(focusX);
-        this.setPivotY(focusY);
-       // this.setPivotX(0f);
-       // this.setPivotY(0f);
-        this.setScaleX(mScaleFactor);
-        this.setScaleY(mScaleFactor);
-
-//        for(Node node: Node.nodeList){
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-//                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        params.leftMargin =(int) (((float) node.x )* mScaleFactor);
-//            params.topMargin = (int) (((float) node.y )* mScaleFactor);
-//            node.textView.setLayoutParams(params);
-//            node.textView.setScaleX(mScaleFactor);
-//            node.textView.setScaleY(mScaleFactor);
-//        }
-
-        //canvas.scale(mScaleFactor, mScaleFactor);
+      //  this.setTranslationX(focusX - this.getWidth() / 2);
+      //  this.setTranslationY(focusY - this.getHeight() / 2);
+        //this.setPivotX(focusX);
+        //this.setPivotY(focusY);
+        float a,b;
+        if (oldmScaleFactor*mScaleFactor-1!=0) {
+            this.setTranslationX(0);
+            this.setTranslationY(0);
+            a = (focusX) + ((oldFocusX - focusX) * (1 - oldmScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
+            b = (focusY) + ((oldFocusY - focusY) * (1 - oldmScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
+            System.out.println("obecne a: " + a + " Obecne b: " + b);
+            //Find new Pivot X
+            this.setPivotX(a);
+            //Find new Pivot Y
+            this.setPivotY(b);
+            }
+        else{
+            this.setTranslationX((focusX - oldFocusX) * (1 - oldmScaleFactor));
+            this.setTranslationY((focusY - oldFocusY) * (1 - oldmScaleFactor));
+        }
+        this.setScaleX(mScaleFactor*oldmScaleFactor);
+        this.setScaleY(mScaleFactor*oldmScaleFactor);
         canvas.restore();
 
     }
@@ -152,20 +155,6 @@ public class DrawingLayout extends RelativeLayout{
         super.onMeasure(0, 0);
     }
 
-/*
-    private class ScaleListener
-            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public boolean onScale(ScaleGestureDetector detector) {
-            mScaleFactor *= detector.getScaleFactor();
-
-            // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.1f, Math.min(mScaleFactor, 5.0f));
-
-            invalidate();
-            return true;
-        }
-    }*/
     private final ScaleGestureDetector.OnScaleGestureListener mScaleListener
             = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
         /**
@@ -179,23 +168,32 @@ public class DrawingLayout extends RelativeLayout{
         @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
             lastSpan = mScaleDetector.getCurrentSpan();
-           // focusX=((scaleGestureDetector.getFocusX()-focusX)*mScaleFactor)+focusX;
-            //focusY=((scaleGestureDetector.getFocusY()-focusY)*mScaleFactor)+focusY;
-            focusX=(scaleGestureDetector.getFocusX()*mScaleFactor);
-            focusY=(scaleGestureDetector.getFocusY()*mScaleFactor);
+            oldmScaleFactor=mScaleFactor*oldmScaleFactor;
+            mScaleFactor=1.f;
+            if (oldmScaleFactor*mScaleFactor-1!=0) {
+                oldFocusX = (focusX) + ((oldFocusX - focusX) * (1 - oldmScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
+                oldFocusY = (focusY) + ((oldFocusY - focusY) * (1 - oldmScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
+            }
+            else{
+                oldFocusX=focusX;
+                oldFocusY=focusY;
+            }
+            focusX = scaleGestureDetector.getFocusX();
+            focusY = scaleGestureDetector.getFocusY();
+            System.out.println("FOCUSY: X: " + focusX + "; Y: "+ focusY );
             return true;
         }
 
         @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             float spana = mScaleDetector.getCurrentSpan();
-            // float spanY = ScaleGestureDetector.getCurrentSpanY(scaleGestureDetector);
+            /*oldFocusX=focusX;
+            oldFocusY=focusY;
+            focusX = scaleGestureDetector.getFocusX();
+            focusY = scaleGestureDetector.getFocusY();
+            oldmScaleFactor=mScaleFactor;
+            mScaleFactor=1.f;*/
             mScaleFactor =  mScaleFactor*spana/lastSpan;
-           // focusX=((scaleGestureDetector.getFocusX()-focusX)/mScaleFactor)+focusX;
-           // focusY=((scaleGestureDetector.getFocusY()-focusY)/mScaleFactor)+focusY;
-            System.out.println("FOCUSY: X: " + focusX + "; Y: "+ focusY );
-            // focusX = scaleGestureDetector.getFocusX()*mScaleFactor;
-            //focusY = scaleGestureDetector.getFocusY()*mScaleFactor;
             invalidate();
             lastSpan = spana;
             return true;

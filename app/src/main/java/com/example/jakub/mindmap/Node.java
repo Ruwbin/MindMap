@@ -91,7 +91,7 @@ public class Node {
 
 
     static Node clickedNode(int clickedX, int clickedY) {
-        System.out.println("clickedX,Y" + clickedX + " " + clickedY);
+     //   System.out.println("clickedX,Y" + clickedX + " " + clickedY);
         Node tempNode = null;
         for (Node node : nodeList) {
             if (node.x <= clickedX && clickedX <= node.x + node.getWidth()
