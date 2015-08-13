@@ -67,24 +67,6 @@ public class Node {
         setText("id: " + id);
         text = String.valueOf("id: " + id);
         setBgColor(Color.GREEN);
-
-        View.OnTouchListener mTouchListener = new View.OnTouchListener(){
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mDrawingLayout.touch_start(event.getRawX(), event.getRawY());
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        mDrawingLayout.touch_move(event.getRawX(), event.getRawY());
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        mDrawingLayout.touch_up(event.getRawX(), event.getRawY());
-                        break;
-                }
-                return true;
-            }
-        };
-        textView.setOnTouchListener(mTouchListener);
         drawingLayout.addView(textView, params);
     }
 
