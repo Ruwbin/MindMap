@@ -23,7 +23,8 @@ public class DrawingLayout extends RelativeLayout{
     Path path2 = new Path();
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f, oldmScaleFactor=1.f;
-    float focusX=1000.f, focusY=1000.f, oldfocusX =1000.f, oldfocusY =1000.f;
+    float pivX=0, pivY=0;
+    float focusX=1.f, focusY=1.f, oldfocusX =0.f, oldfocusY =0.f;
     NodesHandler nodesHandler;
 
     public DrawingLayout(Context context) { //trzy konstruktory musza byc
@@ -42,7 +43,7 @@ public class DrawingLayout extends RelativeLayout{
         drawPaint = new Paint();
         drawPaint.setColor(Color.RED);
         drawPaint.setAntiAlias(true);
-        drawPaint.setStrokeWidth(5);
+        drawPaint.setStrokeWidth(30);
         drawPaint.setStyle(Paint.Style.STROKE);
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -50,6 +51,10 @@ public class DrawingLayout extends RelativeLayout{
         drawPaint2.setColor(Color.CYAN);
         mScaleDetector = new ScaleGestureDetector(context, mScaleListener);
         nodesHandler = new NodesHandler(context);
+        this.setTranslationX(0);
+        this.setTranslationY(0);
+        this.setPivotY(0);
+        this.setPivotX(0);
 
     }
     Float lastX = null;
@@ -58,19 +63,17 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float scaledX=((event.getRawX()-focusX)/mScaleFactor)+focusX,
-                scaledY=((event.getRawY()-focusY)/mScaleFactor)+focusY;
-        System.out.println("clicked X: " + event.getRawX() + " Y: " + event.getRawY());
         mScaleDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touch_start(scaledX,scaledY);
+
+         //       touch_start(scaledX,scaledY);
                 break;
             case MotionEvent.ACTION_MOVE:
-                touch_move(scaledX,scaledY);
+           //     touch_move(scaledX,scaledY);
                 break;
             case MotionEvent.ACTION_UP:
-                touch_up(scaledX,scaledY);
+             //   touch_up(scaledX,scaledY);
                 break;
         }
         return true;
@@ -110,41 +113,38 @@ public class DrawingLayout extends RelativeLayout{
 
     }
 
+    private void scaleLayout(){
+        oldfocusX=(focusX-getPivotX())*mScaleFactor+getPivotX();
+        oldfocusY=(focusY-getPivotY())*mScaleFactor+getPivotY(;
+        System.out.println("Transl: X: " + (getTranslationX() + oldfocusX - focusX) + "; Y: " + (getTranslationY() + oldfocusY - focusY));
+        System.out.println("Focusy: X: " + focusX + "; Y: " + focusY);
+        System.out.println("Oldfoc: X: " + oldfocusX + "; Y: " + oldfocusY);
+        System.out.println("MScale: X: " + getScaleX()+ "; Y: " + getScaleY());
+        System.out.println("Pivoty: X: " + getPivotX() + "; Y: " + getPivotY());
+
+        this.setPivotY(focusY);
+        this.setPivotX(focusX);
+
+        this.setTranslationX(getTranslationX() + oldfocusX - focusX);
+        this.setTranslationY(getTranslationY() + oldfocusY - focusY);
+
+        return;
+    }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
+        path.moveTo(1000,1000);
+        path.lineTo(1001,1001);
         canvas.drawPath(path, drawPaint);
         canvas.drawPath(path2, drawPaint2);
-        canvas.save();
         super.onDraw(canvas);
-        float a,b;
-        focusX=Math.max(0,Math.min(focusX,this.getWidth()));
-        focusY=Math.max(0, Math.min(focusY, this.getHeight()));
-        this.setScaleX(1.f);
-        this.setScaleY(1.f);
-        this.setPivotX(this.getWidth() / 2);
-        this.setPivotY(this.getHeight() / 2);
-        if (oldmScaleFactor*mScaleFactor-1!=0) {
-            this.setTranslationX(0);
-            this.setTranslationY(0);
-            a = (oldfocusX) + ((focusX - oldfocusX) * (1 - mScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
-            b = (oldfocusY) + ((focusY - oldfocusY) * (1 - mScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
-            System.out.println("obecne a: " + a + " Obecne b: " + b);
-            //Find new Pivot X
-            this.setPivotX(a);
-            //Find new Pivot Y
-            this.setPivotY(b);
-            }
-        else{
-            this.setTranslationX((focusX - oldfocusX) * (1 - mScaleFactor));
-            this.setTranslationY((focusY - oldfocusY) * (1 - mScaleFactor));
+        if (Math.max(oldfocusX-focusX,focusX-oldfocusX)>3){
+            scaleLayout();
         }
-        this.setScaleX(mScaleFactor*oldmScaleFactor);
-        this.setScaleY(mScaleFactor*oldmScaleFactor);
-        canvas.restore();
-
-    }
+        this.setScaleX(mScaleFactor);
+        this.setScaleY(mScaleFactor);
+        }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -164,40 +164,21 @@ public class DrawingLayout extends RelativeLayout{
         @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
             lastSpan = mScaleDetector.getCurrentSpan();
-            oldmScaleFactor=mScaleFactor*oldmScaleFactor;
-            mScaleFactor=1.f;
-            if (oldmScaleFactor*mScaleFactor-1!=0) {
-                oldfocusX = (oldfocusX) + ((focusX - oldfocusX) * (1 - mScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
-                oldfocusY = (oldfocusY) + ((focusY - oldfocusY) * (1 - mScaleFactor) / (1 - (oldmScaleFactor * mScaleFactor)));
-            }
-            else{
-                oldfocusX =focusX;
-                oldfocusY =focusY;
-            }
             focusX = scaleGestureDetector.getFocusX();
             focusY = scaleGestureDetector.getFocusY();
-            System.out.println("FOCUSY: X: " + focusX + "; Y: "+ focusY );
+
             return true;
         }
 
         @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             float spana = mScaleDetector.getCurrentSpan();
-            mScaleFactor =  mScaleFactor*spana/lastSpan;
-            lastSpan = spana;
+            mScaleFactor = mScaleFactor*spana/lastSpan;
             invalidate();
             return true;
-             /*oldfocusX=focusX;
-            oldfocusY=focusY;
-            focusX = scaleGestureDetector.getFocusX();
-            focusY = scaleGestureDetector.getFocusY();
-            oldmScaleFactor=mScaleFactor;
-            mScaleFactor=1.f;*/
         }
 
         public void onScaleEnd(ScaleGestureDetector scaleGestureDetector){
-           /* this.setPivotX(0f);
-            this.setPivotY(0f);*/
 
             return;
         }
