@@ -66,14 +66,13 @@ public class DrawingLayout extends RelativeLayout{
         mScaleDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-
-         //       touch_start(scaledX,scaledY);
+                touch_start(event.getX(),event.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
-           //     touch_move(scaledX,scaledY);
+                touch_move(event.getX(),event.getY());
                 break;
             case MotionEvent.ACTION_UP:
-             //   touch_up(scaledX,scaledY);
+                touch_up(event.getX(),event.getY());
                 break;
         }
         return true;
@@ -115,7 +114,7 @@ public class DrawingLayout extends RelativeLayout{
 
     private void scaleLayout(){
         oldfocusX=(focusX-getPivotX())*mScaleFactor+getPivotX();
-        oldfocusY=(focusY-getPivotY())*mScaleFactor+getPivotY(;
+        oldfocusY=(focusY-getPivotY())*mScaleFactor+getPivotY();
         System.out.println("Transl: X: " + (getTranslationX() + oldfocusX - focusX) + "; Y: " + (getTranslationY() + oldfocusY - focusY));
         System.out.println("Focusy: X: " + focusX + "; Y: " + focusY);
         System.out.println("Oldfoc: X: " + oldfocusX + "; Y: " + oldfocusY);
@@ -134,8 +133,6 @@ public class DrawingLayout extends RelativeLayout{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        path.moveTo(1000,1000);
-        path.lineTo(1001,1001);
         canvas.drawPath(path, drawPaint);
         canvas.drawPath(path2, drawPaint2);
         super.onDraw(canvas);
@@ -153,13 +150,7 @@ public class DrawingLayout extends RelativeLayout{
 
     private final ScaleGestureDetector.OnScaleGestureListener mScaleListener
             = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-        /**
-         * This is the active focal point in terms of the viewport. Could be a local
-         * variable but kept here to minimize per-frame allocations.
-         */
-        private PointF viewportFocus = new PointF();
         private float lastSpan;
-        //private float lastSpanY;
 
         @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
