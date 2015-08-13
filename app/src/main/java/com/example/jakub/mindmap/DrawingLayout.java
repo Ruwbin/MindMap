@@ -95,8 +95,10 @@ public class DrawingLayout extends RelativeLayout{
 
     public void touch_move(float rawX, float rawY) {
         System.out.println("move");
-        if(begNode != null)
-        path2.lineTo(rawX, rawY);
+        if(begNode != null) {
+            path2.lineTo(rawX, rawY);
+            invalidate();
+        }
     }
 
     public void touch_up(float rawX, float rawY) {
