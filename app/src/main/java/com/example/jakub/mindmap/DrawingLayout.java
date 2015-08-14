@@ -20,6 +20,7 @@ import com.example.jakub.mindmap.handlers.NodesHandler;
 public class DrawingLayout extends RelativeLayout{
     Paint drawPaint,drawPaint2;
     Path path = new Path();
+    Path restorePath = new Path();
     Path path2 = new Path();
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f, oldmScaleFactor=1.f;
@@ -55,8 +56,18 @@ public class DrawingLayout extends RelativeLayout{
         this.setTranslationY(0);
         this.setPivotY(0);
         this.setPivotX(0);
-
+        restorePaths();
     }
+
+    private void restorePaths() {
+        for (Node node : Node.nodeList) {
+            if(node.parent!=null){
+                restorePath.moveTo(node.x,node.y);
+                restorePath.lineTo(node.parent.x,node.parent.y);
+                }
+        }
+    }
+
     Float lastX = null;
     Float lastY = null;
     Node begNode = null;
@@ -66,15 +77,15 @@ public class DrawingLayout extends RelativeLayout{
         mScaleDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touch_start(event.getX(),event.getY());
+                touch_start(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
-                touch_move(event.getX(),event.getY());
+                touch_move(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_UP:
-                touch_up(event.getX(),event.getY());
+                touch_up(event.getX(), event.getY());
                 break;
-        }
+            }
         return true;
     }
 
@@ -137,6 +148,7 @@ public class DrawingLayout extends RelativeLayout{
     protected void onDraw(Canvas canvas) {
         canvas.drawPath(path, drawPaint);
         canvas.drawPath(path2, drawPaint2);
+        canvas.drawPath(restorePath, drawPaint);
         super.onDraw(canvas);
         if (Math.max(oldfocusX-focusX,focusX-oldfocusX)>3){
             scaleLayout();
@@ -157,8 +169,7 @@ public class DrawingLayout extends RelativeLayout{
         @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector) {
             lastSpan = mScaleDetector.getCurrentSpan();
-            focusX = scaleGestureDetector.getFocusX();
-            focusY = scaleGestureDetector.getFocusY();
+
 
             return true;
         }
@@ -167,6 +178,8 @@ public class DrawingLayout extends RelativeLayout{
         public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
             float spana = mScaleDetector.getCurrentSpan();
             mScaleFactor = mScaleFactor*spana/lastSpan;
+            focusX = scaleGestureDetector.getFocusX();
+            focusY = scaleGestureDetector.getFocusY();
             invalidate();
             return true;
         }

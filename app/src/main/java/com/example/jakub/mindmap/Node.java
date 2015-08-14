@@ -21,6 +21,7 @@ public class Node {
     TextView textView;
     String text;
     int id = 0;
+    Node parent;
     DrawingLayout mDrawingLayout;
 
     public int getX() {
@@ -43,6 +44,8 @@ public class Node {
         this.y = y;
         id = ID++;
         nodeList.add(this);
+        this.parent=nodeList.get(0);
+
     }
 
     public Node(int x, int y, DrawingLayout drawingLayout) {
@@ -51,6 +54,8 @@ public class Node {
         id = ID++;
         this.mDrawingLayout=drawingLayout;
         nodeList.add(this);
+        this.parent=nodeList.get(0);
+
     }
 
     public void paint(DrawingLayout drawingLayout) {

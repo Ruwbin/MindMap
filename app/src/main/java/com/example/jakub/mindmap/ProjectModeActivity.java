@@ -3,6 +3,7 @@ package com.example.jakub.mindmap;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class ProjectModeActivity extends ActionBarActivity {
             node.setText(nodeBuilder.getText());
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
