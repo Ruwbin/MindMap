@@ -34,10 +34,10 @@ public class ProjectModeActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         nodesHandler = new NodesHandler(this);
         setContentView(R.layout.activity_main);
-        restore();
+        //restore();
     }
 
-    public void restore(){
+   /* public void restore(){
         List<NodesHandler.NodeBuilder> nodeBuilderList = nodesHandler.readNodeBuilderList();
         if(nodeBuilderList.isEmpty()){
             Display display = getWindowManager().getDefaultDisplay();
@@ -45,17 +45,21 @@ public class ProjectModeActivity extends ActionBarActivity {
             display.getSize(size);
             int width = size.x;
             int height = size.y;
-            Node node = new Node(width/2,height/2);
+            Node node = new Node(width/2,height/2,null);
             node.paint((DrawingLayout) findViewById(R.id.mainLayout));
             node.setText("MainNode");
             nodesHandler.addNode(node);
         }
+        int i =0;
         for(NodesHandler.NodeBuilder nodeBuilder: nodeBuilderList){
-            Node node = new Node(nodeBuilder.getX(),nodeBuilder.getY());
+            System.out.println("size "+i++ +" "+Node.nodeList.size());
+            Node node = new Node(nodeBuilder.getX(),nodeBuilder.getY(),null);
+            node.setParent(Node.nodeList.get(nodeBuilder.getParent()));
+
             node.paint((DrawingLayout) findViewById(R.id.mainLayout));
             node.setText(nodeBuilder.getText());
         }
-    }
+    }*/
 
 
     @Override

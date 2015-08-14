@@ -35,6 +35,8 @@ public class NodesHandler {
         values.put(MapContract.NodeEntry.COLUMN_TEXT,node.getText());
         values.put(MapContract.NodeEntry.COLUMN_X,node.getX());
         values.put(MapContract.NodeEntry.COLUMN_Y, node.getY());
+        values.put(MapContract.NodeEntry.COLUMN_PARENT, node.getParent().getId());
+
         long idRet = -1;
         try {
             idRet = db.insert(MapContract.NodeEntry.TABLE_NAME, null, values);
@@ -71,19 +73,29 @@ public class NodesHandler {
     }
 
     private NodeBuilder fromCursor(Cursor cursor) {
-        return new NodeBuilder(cursor.getString(1),cursor.getInt(2),cursor.getInt(3));
+        return new NodeBuilder(cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4));
 
     }
 
     public class NodeBuilder {
+        public int getParent() {
+            return parent;
+        }
+
+        public void setParent(int parent) {
+            this.parent = parent;
+        }
+
+        int parent;
         String text;
         int x;
         int y;
 
-        public NodeBuilder(String text, int x, int y) {
+        public NodeBuilder(String text, int x, int y,int parent) {
             this.text = text;
             this.x = x;
             this.y = y;
+            this.parent = parent;
         }
 
 

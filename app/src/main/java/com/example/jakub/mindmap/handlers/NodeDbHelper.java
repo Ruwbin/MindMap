@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Jakub on 2015-08-06.
  */
 public class NodeDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 12;
     public static final String DATABASE_NAME = "NodesReader.db";
 
     public NodeDbHelper(Context context) {

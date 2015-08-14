@@ -11,7 +11,8 @@ public class MapContract {
                     NodeEntry._ID + " INTEGER PRIMARY KEY, " +
                     NodeEntry.COLUMN_TEXT + " TEXT " + "," +
                     NodeEntry.COLUMN_X + " INTEGER " + "," +
-                    NodeEntry.COLUMN_Y + " INTEGER " +
+                    NodeEntry.COLUMN_Y + " INTEGER " + "," +
+                    NodeEntry.COLUMN_PARENT + " INTEGER " +
             " )";
 
     public static final String SQL_DELETE_ENTRIES =
@@ -25,5 +26,16 @@ public class MapContract {
         public static final String COLUMN_TEXT = "inputText";
         public static final String COLUMN_X = "x";
         public static final String COLUMN_Y= "y";
+        public static final String COLUMN_PARENT= "parent";
+
+    }
+
+    public static abstract class MapEntry implements  BaseColumns{
+        public static final String TABLE_NAME = "maps";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_MOTIVE = "motive";
+        public static final String COLUMN_ARRANGEMENT = "arrangement";
+
+
     }
 }

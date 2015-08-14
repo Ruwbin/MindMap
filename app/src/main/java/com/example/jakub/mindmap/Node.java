@@ -20,9 +20,55 @@ import java.util.List;
 public class Node {
     TextView textView;
     String text;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     int id = 0;
-    Node parent;
     DrawingLayout mDrawingLayout;
+    Node parent;
+    volatile static int ID = 0;
+    public static List<Node> nodeList = new LinkedList<Node>(); //zmienic na mape
+    int x, y;
+
+    public Node(int x, int y, Node parent) {
+        this.x = x;
+        this.y = y;
+        id = ID++;
+        nodeList.add(this);
+        if (parent == null)
+            this.parent = this;
+        else
+            this.parent = parent;
+
+    }
+
+    public Node(int x, int y, DrawingLayout drawingLayout, Node parent) {
+        this.x = x;
+        this.y = y;
+        id = ID++;
+        this.mDrawingLayout = drawingLayout;
+        this.parent = parent;
+        nodeList.add(this);
+        if (parent == null)
+            this.parent = this;
+        else
+            this.parent = parent;
+
+    }
+
+    public Node getParent() {
+        return parent;
+    }
+
+    public void setParent(Node parent) {
+        this.parent = parent;
+    }
 
     public int getX() {
         return x;
@@ -36,30 +82,8 @@ public class Node {
         return text;
     }
 
-    volatile static int ID = 0;
-    public static List<Node> nodeList = new LinkedList<Node>(); //zmienic na mape
-    int x, y;
-    public Node(int x, int y) {
-        this.x = x;
-        this.y = y;
-        id = ID++;
-        nodeList.add(this);
-        this.parent=nodeList.get(0);
-
-    }
-
-    public Node(int x, int y, DrawingLayout drawingLayout) {
-        this.x = x;
-        this.y = y;
-        id = ID++;
-        this.mDrawingLayout=drawingLayout;
-        nodeList.add(this);
-        this.parent=nodeList.get(0);
-
-    }
-
     public void paint(DrawingLayout drawingLayout) {
-        this.mDrawingLayout=drawingLayout;
+        this.mDrawingLayout = drawingLayout;
         textView = new TextView(drawingLayout.getContext());
         textView.setLayoutParams(new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -96,7 +120,7 @@ public class Node {
 
 
     static Node clickedNode(int clickedX, int clickedY) {
-     //   System.out.println("clickedX,Y" + clickedX + " " + clickedY);
+        //   System.out.println("clickedX,Y" + clickedX + " " + clickedY);
         Node tempNode = null;
         for (Node node : nodeList) {
             if (node.x <= clickedX && clickedX <= node.x + node.getWidth()
